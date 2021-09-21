@@ -22,7 +22,7 @@
   <parent>
     <groupId>io.opil</groupId>
     <artifactId>google-java-format-parent</artifactId>
-  <version>HEAD-SNAPSHOT</version>
+    <version>HEAD-SNAPSHOT</version>
   </parent>
 
   <artifactId>google-java-format</artifactId>
@@ -32,6 +32,10 @@
   <description>
     A Java source code formatter that follows Google Java Style.
   </description>
+
+  <properties>
+    <maven.deploy.skip>false</maven.deploy.skip>
+  </properties>
 
   <dependencies>
     <!-- Required runtime dependencies -->
