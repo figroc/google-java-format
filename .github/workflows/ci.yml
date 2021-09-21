@@ -68,7 +68,7 @@ jobs:
   publish_snapshot:
     name: 'Publish snapshot'
     needs: test
-    if: github.event_name == 'push' && github.repository == 'google/google-java-format' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.repository == 'figroc/google-java-format' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: 'Check out repository'

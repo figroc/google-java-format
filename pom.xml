@@ -20,17 +20,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.google.googlejavaformat</groupId>
+  <groupId>io.opil.gjf</groupId>
   <artifactId>google-java-format-parent</artifactId>
   <packaging>pom</packaging>
   <version>HEAD-SNAPSHOT</version>
 
   <modules>
     <module>core</module>
-    <!-- google-java-format#24
-    <module>idea_plugin</module>
-    <module>eclipse_plugin</module>
-    -->
   </modules>
 
   <name>Google Java Format Parent</name>

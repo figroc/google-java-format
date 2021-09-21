@@ -14,7 +14,7 @@
 
 # https://github.com/google/dagger/blob/master/util/publish-snapshot-on-commit.sh
 
-if [ "$TRAVIS_REPO_SLUG" == "google/google-java-format" ] && \
+if [ "$TRAVIS_REPO_SLUG" == "figroc/google-java-format" ] && \
    [ "$TRAVIS_JDK_VERSION" == "oraclejdk8" ] && \
    [ "$TRAVIS_PULL_REQUEST" == "false" ] && \
    [ "$TRAVIS_BRANCH" == "master" ]; then
