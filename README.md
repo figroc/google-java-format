@@ -52,7 +52,7 @@ configuration.
 
 ```xml
 <dependency>
-  <groupId>io.opil.gjf</groupId>
+  <groupId>io.opil</groupId>
   <artifactId>google-java-format</artifactId>
   <version>1.11.0</version>
 </dependency>
@@ -62,7 +62,7 @@ configuration.
 
 ```groovy
 dependencies {
-  implementation 'io.opil.gjf:google-java-format:1.11.0'
+  implementation 'io.opil:google-java-format:1.11.0'
 }
 ```
 

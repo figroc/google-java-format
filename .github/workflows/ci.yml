@@ -17,10 +17,10 @@ name: CI
 on:
   push:
     branches:
-    - master
+    - modified
   pull_request:
     branches:
-    - master
+    - modified
 
 jobs:
   test:
@@ -65,10 +65,10 @@ jobs:
         shell: bash
         run: mvn test -B
 
-  publish_snapshot:
-    name: 'Publish snapshot'
+  publish:
+    name: 'Publish snapshots'
     needs: test
-    if: github.event_name == 'push' && github.repository == 'figroc/google-java-format' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.repository == 'figroc/google-java-format' && github.ref == 'refs/heads/modified'
     runs-on: ubuntu-latest
     steps:
       - name: 'Check out repository'
