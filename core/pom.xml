@@ -33,10 +33,6 @@
     A Java source code formatter that follows Google Java Style.
   </description>
 
-  <properties>
-    <maven.deploy.skip>false</maven.deploy.skip>
-  </properties>
-
   <dependencies>
     <!-- Required runtime dependencies -->
     <dependency>

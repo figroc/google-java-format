@@ -29,7 +29,7 @@
     <module>core</module>
   </modules>
 
-  <name>Google Java Format Parent</name>
+  <name>Modified Google Java Format Parent</name>
 
   <description>
     A Java source code formatter that follows Google Java Style.
@@ -85,7 +85,6 @@
     <auto-service.version>1.0</auto-service.version>
     <maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <maven.deploy.skip>true</maven.deploy.skip>
   </properties>
 
   <dependencyManagement>
