@@ -299,6 +299,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
   protected final int indentMultiplier;
   protected final Indent.Const minusTwo;
   protected final Indent.Const minusFour;
+  protected final Indent.Const plusOne;
   protected final Indent.Const plusTwo;
   protected final Indent.Const plusFour;
 
@@ -335,6 +336,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     this.indentMultiplier = indentMultiplier;
     minusTwo = Indent.Const.make(-2, indentMultiplier);
     minusFour = Indent.Const.make(-4, indentMultiplier);
+    plusOne = Indent.Const.make(+1, 1);
     plusTwo = Indent.Const.make(+2, indentMultiplier);
     plusFour = Indent.Const.make(+4, indentMultiplier);
   }
@@ -1008,56 +1010,44 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     builder.space();
     token("(");
     builder.open(plusFour);
-    builder.open(
-        node.getInitializer().size() > 1
-                && node.getInitializer().get(0).getKind() == Tree.Kind.EXPRESSION_STATEMENT
-            ? plusFour
-            : ZERO);
-    if (!node.getInitializer().isEmpty()) {
-      if (node.getInitializer().get(0).getKind() == VARIABLE) {
+    List<? extends StatementTree> initrs = node.getInitializer();
+    if (!initrs.isEmpty()) {
+      StatementTree first = initrs.get(0);
+      if (first.getKind() == VARIABLE) {
         PeekingIterator<StatementTree> it =
             Iterators.peekingIterator(node.getInitializer().iterator());
         visitVariables(
             variableFragments(it, it.next()), DeclarationKind.NONE, Direction.HORIZONTAL);
       } else {
-        boolean first = true;
-        builder.open(ZERO);
         for (StatementTree t : node.getInitializer()) {
-          if (!first) {
+          if (first != t) {
             token(",");
-            builder.breakOp(" ");
+            builder.breakOp(FillMode.UNIFIED, " ", plusOne);
           }
           scan(((ExpressionStatementTree) t).getExpression(), null);
-          first = false;
         }
         token(";");
-        builder.close();
       }
     } else {
       token(";");
     }
-    builder.close();
-    builder.breakOp(" ");
+    builder.breakOp(FillMode.UNIFIED, " ", plusOne);
     if (node.getCondition() != null) {
       scan(node.getCondition(), null);
     }
     token(";");
-    if (!node.getUpdate().isEmpty()) {
-      builder.breakOp(" ");
-      builder.open(node.getUpdate().size() <= 1 ? ZERO : plusFour);
-      boolean firstUpdater = true;
-      for (ExpressionStatementTree updater : node.getUpdate()) {
-        if (!firstUpdater) {
+    List<? extends ExpressionStatementTree> updtrs = node.getUpdate();
+    if (!updtrs.isEmpty()) {
+      builder.breakOp(FillMode.UNIFIED, " ", plusOne);
+      ExpressionStatementTree first = updtrs.get(0);
+      for (ExpressionStatementTree t : updtrs) {
+        if (first != t) {
           token(",");
-          builder.breakToFill(" ");
+          builder.breakOp(FillMode.UNIFIED, " ", plusOne);
         }
-        scan(updater.getExpression(), null);
-        firstUpdater = false;
+        scan(t.getExpression(), null);
       }
       builder.guessToken(";");
-      builder.close();
-    } else {
-      builder.space();
     }
     builder.close();
     token(")");
@@ -1937,16 +1927,19 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     builder.open(ZERO);
     token("try");
     builder.space();
-    if (!node.getResources().isEmpty()) {
+    List<? extends Tree> resources = node.getResources();
+    if (!resources.isEmpty()) {
       token("(");
-      builder.open(node.getResources().size() > 1 ? plusFour : ZERO);
-      boolean first = true;
-      for (Tree resource : node.getResources()) {
-        if (!first) {
-          builder.forcedBreak();
+      builder.open(plusFour);
+      Tree first = resources.get(0);
+      Tree last = resources.get(resources.size() - 1);
+      for (Tree resource : resources) {
+        if (first != resource) {
+          builder.breakOp(FillMode.UNIFIED, " ", plusOne);
         }
         if (resource instanceof VariableTree) {
           VariableTree variableTree = (VariableTree) resource;
+          
           declareOne(
               DeclarationKind.PARAMETER,
               fieldAnnotationDirection(variableTree.getModifiers()),
@@ -1964,15 +1957,10 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
           scan(resource, null);
         }
         if (builder.peekToken().equals(Optional.of(";"))) {
-          token(";");
-          builder.space();
+          if (resource != last) token(";");
         }
-        first = false;
       }
-      if (builder.peekToken().equals(Optional.of(";"))) {
-        token(";");
-        builder.space();
-      }
+      builder.guessToken(";");
       token(")");
       builder.close();
       builder.space();
