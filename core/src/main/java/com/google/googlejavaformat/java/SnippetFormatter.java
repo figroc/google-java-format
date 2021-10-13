@@ -53,7 +53,7 @@ public class SnippetFormatter {
     }
 
     public void closeBraces(int initialIndent) {
-      for (int i = initialIndent; --i >= 0; ) {
+      for (int i = initialIndent; --i >= 0;) {
         contents.append("\n").append(createIndentationString(i)).append("}");
       }
     }

@@ -275,7 +275,7 @@ final class JavadocLexer {
     ImmutableList.Builder<Token> output = ImmutableList.builder();
     StringBuilder accumulated = new StringBuilder();
 
-    for (PeekingIterator<Token> tokens = peekingIterator(input.iterator()); tokens.hasNext(); ) {
+    for (PeekingIterator<Token> tokens = peekingIterator(input.iterator()); tokens.hasNext();) {
       if (tokens.peek().getType() == LITERAL) {
         accumulated.append(tokens.peek().getValue());
         tokens.next();
@@ -335,7 +335,7 @@ final class JavadocLexer {
   private static ImmutableList<Token> inferParagraphTags(List<Token> input) {
     ImmutableList.Builder<Token> output = ImmutableList.builder();
 
-    for (PeekingIterator<Token> tokens = peekingIterator(input.iterator()); tokens.hasNext(); ) {
+    for (PeekingIterator<Token> tokens = peekingIterator(input.iterator()); tokens.hasNext();) {
       if (tokens.peek().getType() == LITERAL) {
         output.add(tokens.next());
 
@@ -373,7 +373,7 @@ final class JavadocLexer {
   private static ImmutableList<Token> optionalizeSpacesAfterLinks(List<Token> input) {
     ImmutableList.Builder<Token> output = ImmutableList.builder();
 
-    for (PeekingIterator<Token> tokens = peekingIterator(input.iterator()); tokens.hasNext(); ) {
+    for (PeekingIterator<Token> tokens = peekingIterator(input.iterator()); tokens.hasNext();) {
       if (tokens.peek().getType() == LITERAL && tokens.peek().getValue().matches("^href=[^>]*>")) {
         output.add(tokens.next());
 
@@ -401,7 +401,7 @@ final class JavadocLexer {
    */
   private static ImmutableList<Token> deindentPreCodeBlocks(List<Token> input) {
     ImmutableList.Builder<Token> output = ImmutableList.builder();
-    for (PeekingIterator<Token> tokens = peekingIterator(input.iterator()); tokens.hasNext(); ) {
+    for (PeekingIterator<Token> tokens = peekingIterator(input.iterator()); tokens.hasNext();) {
       if (tokens.peek().getType() != PRE_OPEN_TAG) {
         output.add(tokens.next());
         continue;
