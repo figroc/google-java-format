@@ -1561,7 +1561,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
    *
    * <pre>{@code
    * logger.atInfo().log(
-   *     "Number of foos: %d, foos.size());
+   *     "Number of foos: %d", foos.size());
    * }</pre>
    *
    * <p>Instead of:
@@ -1570,11 +1570,11 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
    * logger
    *     .atInfo()
    *     .log(
-   *         "Number of foos: %d, foos.size());
+   *         "Number of foos: %d", foos.size());
    * }</pre>
    */
   private boolean handleLogStatement(MethodInvocationTree node) {
-    if (!getMethodName(node).contentEquals("log")) {
+    if (!LOG_ACTIONS.contains(getMethodName(node).toString())) {
       return false;
     }
     Deque<ExpressionTree> parts = new ArrayDeque<>();
@@ -1596,8 +1596,17 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     return true;
   }
 
-  static final ImmutableSet<String> LOG_METHODS =
+  static final ImmutableSet<String> LOG_ACTIONS =
       ImmutableSet.of(
+          "log",
+          "trace",
+          "debug",
+          "info",
+          "warn",
+          "error");
+
+  static final ImmutableSet<String> LOG_METHODS =
+      new ImmutableSet.Builder<String>().addAll(LOG_ACTIONS).add(
           "at",
           "atConfig",
           "atDebug",
@@ -1609,11 +1618,10 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
           "atSevere",
           "atWarning",
           "every",
-          "log",
           "logVarargs",
           "perUnique",
           "withCause",
-          "withStackTrace");
+          "withStackTrace").build();
 
   private static List<Long> handleStream(List<ExpressionTree> parts) {
     return indexes(
@@ -3320,7 +3328,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     return isStringConcat(arguments.get(0));
   }
 
-  private static final Pattern FORMAT_SPECIFIER = Pattern.compile("%|\\{[0-9]\\}");
+  private static final Pattern FORMAT_SPECIFIER = Pattern.compile("%|\\{[0-9a-zA-Z_.]*\\}");
 
   private boolean isStringConcat(ExpressionTree first) {
     final boolean[] stringLiteral = {true};
