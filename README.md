@@ -13,7 +13,7 @@
 and run it with:
 
 ```
-java -jar /path/to/google-java-format-1.11.0-all-deps.jar <options> [files...]
+java -jar /path/to/google-java-format-1.11.1-all-deps.jar <options> [files...]
 ```
 
 The formatter can act on whole files, on limited lines (`--lines`), on specific
@@ -39,7 +39,7 @@ java \
   --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
   --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
   --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
-  -jar google-java-format-1.11.0-all-deps.jar <options> [files...]
+  -jar google-java-format-1.11.1-all-deps.jar <options> [files...]
 ```
 
 ### as a library
@@ -54,7 +54,7 @@ configuration.
 <dependency>
   <groupId>io.opil</groupId>
   <artifactId>google-java-format</artifactId>
-  <version>1.11.0</version>
+  <version>1.11.1</version>
 </dependency>
 ```
 
@@ -62,7 +62,7 @@ configuration.
 
 ```groovy
 dependencies {
-  implementation 'io.opil:google-java-format:1.11.0'
+  implementation 'io.opil:google-java-format:1.11.1'
 }
 ```
 
