@@ -38,7 +38,7 @@ import java.util.Optional;
  */
 public final class OpsBuilder {
 
-  /** @return the actual size of the AST node at position, including comments. */
+  /** Returns the actual size of the AST node at position, including comments. */
   public int actualSize(int position, int length) {
     Token startToken = input.getPositionTokenMap().get(position);
     int start = startToken.getTok().getPosition();
@@ -57,7 +57,7 @@ public final class OpsBuilder {
     return end - start;
   }
 
-  /** @return the start column of the token at {@code position}, including leading comments. */
+  /** Returns the start column of the token at {@code position}, including leading comments. */
   public Integer actualStartColumn(int position) {
     Token startToken = input.getPositionTokenMap().get(position);
     int start = startToken.getTok().getPosition();

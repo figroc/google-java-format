@@ -126,7 +126,7 @@ public abstract class Doc {
   }
 
   /**
-   * Return a {@code Doc}'s flat-string value; not defined (and never called) if the (@code Doc}
+   * Return a {@code Doc}'s flat-string value; not defined (and never called) if the {@code Doc}
    * contains forced breaks.
    *
    * @return the flat-string value

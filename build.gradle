@@ -76,11 +76,17 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 compileJava {
+    options.encoding = "UTF-8"
     options.compilerArgs += compilerOptions.plus("-XDcompilePolicy=simple")
+}
+
+compileTestJava {
+    options.encoding = "UTF-8"
 }
 
 javadoc {
     title = "Google Java Format API"
+    options.encoding = "UTF-8"
     compilerOptions.each {
         options.addBooleanOption it.substring(1), true
     }
@@ -88,6 +94,7 @@ javadoc {
 
 test {
     jvmArgs compilerOptions
+    systemProperty "file.encoding", "UTF-8"
 }
 
 publishing {
