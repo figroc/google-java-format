@@ -40,7 +40,6 @@ dependencies {
     implementation "com.google.guava:guava:${guavaVersion}"
 
     errorprone "com.google.errorprone:error_prone_core:${errorProneVer}"
-    annotationProcessor "com.google.errorprone:error_prone_annotations:${errorProneVer}"
     compileOnly "com.google.auto.value:auto-value-annotations:${autoValueVer}"
     annotationProcessor "com.google.auto.value:auto-value:${autoValueVer}"
     compileOnly "com.google.auto.service:auto-service-annotations:${autoServiceVer}"
@@ -77,7 +76,6 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 compileJava {
-    options.fork = true
     options.compilerArgs += compilerOptions.plus("-XDcompilePolicy=simple")
 }
 
@@ -86,6 +84,10 @@ javadoc {
     compilerOptions.each {
         options.addBooleanOption it.substring(1), true
     }
+}
+
+test {
+    jvmArgs compilerOptions
 }
 
 publishing {
