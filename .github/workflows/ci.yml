@@ -40,9 +40,6 @@ jobs:
           - os: windows-latest
             java: 17
             experimental: false
-          - os: ubuntu-latest
-            java: 18-ea
-            experimental: true
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     steps:
