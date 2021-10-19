@@ -1,0 +1,137 @@
+plugins {
+    id "java"
+    id "signing"
+    id "application"
+    id "maven-publish"
+    id "net.ltgt.errorprone" version "2.0.2"
+    id "com.github.johnrengelman.shadow" version "7.1.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = "io.opil"
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+ext {
+    guavaVersion = "30.1.1-jre"
+    errorProneVer = "2.7.1"
+    autoValueVer = "1.8.2"
+    autoServiceVer = "1.0"
+    compileTestVer = "0.15"
+
+    compilerOptions = [
+        "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+    ]
+}
+
+dependencies {
+    implementation "com.google.guava:guava:${guavaVersion}"
+
+    errorprone "com.google.errorprone:error_prone_core:${errorProneVer}"
+    annotationProcessor "com.google.errorprone:error_prone_annotations:${errorProneVer}"
+    compileOnly "com.google.auto.value:auto-value-annotations:${autoValueVer}"
+    annotationProcessor "com.google.auto.value:auto-value:${autoValueVer}"
+    compileOnly "com.google.auto.service:auto-service-annotations:${autoServiceVer}"
+    annotationProcessor "com.google.auto.service:auto-service:${autoServiceVer}"
+
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "com.google.guava:guava-testlib:${guavaVersion}"
+    testImplementation "com.google.truth:truth:1.0"
+    testImplementation "com.google.testing.compile:compile-testing:${compileTestVer}"
+}
+
+application {
+    mainClass = "com.google.googlejavaformat.java.Main"
+}
+
+jar {
+    manifest {
+        attributes "Implementation-Version": project.version
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            if (JavaVersion.current() < JavaVersion.VERSION_14) {
+                exclude "**/Java14InputAstVisitor.java"
+            }
+            srcDir "${buildDir}/generated-sources/java"
+        }
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+compileJava {
+    options.fork = true
+    options.compilerArgs += compilerOptions.plus("-XDcompilePolicy=simple")
+}
+
+javadoc {
+    title = "Google Java Format API"
+    compilerOptions.each {
+        options.addBooleanOption it.substring(1), true
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            pom {
+                name = "Modified Google Java Format"
+                description = "A Java source code formatter that follows Google Java Style."
+                url = "https://github.com/figroc/google-java-format"
+                licenses {
+                    license {
+                        name = "The Apache Software License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "figroc"
+                        name = "P Chen"
+                        email = "figroc@gmail.com"
+                    }
+                }
+                scm {
+                    url = "http://github.com/figroc/google-java-format/"
+                    connection = "scm:git:git://github.com/figroc/google-java-format.git"
+                    developerConnection = "scm:git:ssh://git@github.com/figroc/google-java-format.git"
+                }
+                issueManagement {
+                    system = "GitHub Issues"
+                    url = "http://github.com/figroc/google-java-format/issues"
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username findProperty("sonatypeUsername")
+                password findProperty("sonatypePassword")
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.maven
+}
