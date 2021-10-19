@@ -53,7 +53,6 @@ import static java.util.regex.Pattern.compile;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.PeekingIterator;
-import com.google.googlejavaformat.java.javadoc.Token.Type;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -128,12 +127,12 @@ final class JavadocLexer {
   }
 
   private Token readToken() throws LexException {
-    Type type = consumeToken();
+    Token.Type type = consumeToken();
     String value = input.readAndResetRecorded();
     return new Token(type, value);
   }
 
-  private Type consumeToken() throws LexException {
+  private Token.Type consumeToken() throws LexException {
     boolean preserveExistingFormatting = preserveExistingFormatting();
 
     if (input.tryConsumeRegex(NEWLINE_PATTERN)) {

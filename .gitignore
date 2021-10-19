@@ -2,17 +2,17 @@
 *.ims
 *.iml
 
+.vscode/
+
 .classpath
 .project
 .factorypath
 .settings/
 .apt_generated/
 
+.gradle/
+build/
 target/
 
 bin/
 out/
-eclipse_plugin/lib/
-
-**/pom.xml.*
-core/javac.*.args
