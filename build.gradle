@@ -19,21 +19,18 @@ java {
 }
 
 ext {
-    guavaVersion = "30.1.1-jre"
-    errorProneVer = "2.7.1"
-    autoValueVer = "1.8.2"
-    autoServiceVer = "1.0"
-    compileTestVer = "0.15"
+    guavaVersion = "31.0.1-jre"
+    errorProneVer = "2.11.0"
+    autoValueVer = "1.9"
+    autoServiceVer = "1.0.1"
+    junitVersion = "4.13.2"
+    truthVersion = "1.1.3"
+    compileTestVer = "0.19"
 
-    compilerOptions = [
-        "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
-        "--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
-        "--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-        "--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
-        "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-        "--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
-        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
-    ]
+    compilerExports = ["api", "file", "main", "parser", "tree", "util"]
+    compilerOptions = compilerExports.plus("code").collect {
+        "--add-exports=jdk.compiler/com.sun.tools.javac.${it}=ALL-UNNAMED"
+    }
 }
 
 dependencies {
@@ -45,9 +42,10 @@ dependencies {
     compileOnly "com.google.auto.service:auto-service-annotations:${autoServiceVer}"
     annotationProcessor "com.google.auto.service:auto-service:${autoServiceVer}"
 
-    testImplementation "junit:junit:4.13.2"
+    testImplementation "junit:junit:${junitVersion}"
     testImplementation "com.google.guava:guava-testlib:${guavaVersion}"
-    testImplementation "com.google.truth:truth:1.0"
+    testImplementation "com.google.truth:truth:${truthVersion}"
+    testImplementation "com.google.truth.extensions:truth-java8-extension:${truthVersion}"
     testImplementation "com.google.testing.compile:compile-testing:${compileTestVer}"
 }
 
@@ -57,7 +55,13 @@ application {
 
 jar {
     manifest {
-        attributes "Implementation-Version": project.version
+        attributes (
+            "Add-Exports": compilerExports.plus(["model", "processing"])
+                .collect { "jdk.compiler/com.sun.tools.javac.${it}" }.join(" "),
+            "Add-Opens": ["code", "comp"]
+                .collect { "jdk.compiler/com.sun.tools.javac.${it}" }.join(" "),
+            "Implementation-Version": project.version
+        )
     }
 }
 
